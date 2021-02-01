@@ -1,5 +1,14 @@
 # ginlog
-logger for gin
+Middleware logger for gin.
+
+Write the logs: client IP address, execution time, request and response.
+
+### Output example:
+```
+[GIN] ::1             [2021/02/01 10:21:15] 200 POST /v1/auth   125.91203ms
+[GIN-DEBUG] {"device_id":"s1"}
+[GIN-DEBUG] RESPONSE: {"result":true,"token":"49f7174a-a2a7-4a17-5093-12w7879cc6b4","user":{"id":4,"name":"A","role":"admin","photo":null,"auth":"none"}}
+```
 
 ## Usage
 ```go
