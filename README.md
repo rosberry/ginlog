@@ -1,9 +1,11 @@
 # ginlog
-Middleware logger for gin.
+
+Middleware logger for [gin](https://github.com/gin-gonic/gin).
 
 Write the logs: client IP address, execution time, request and response.
 
 ### Output example:
+
 ```
 [GIN] ::1             [2021/02/01 10:21:15] 200 POST /v1/auth   125.91203ms
 [GIN-DEBUG] {"device_id":"s1"}
@@ -11,6 +13,19 @@ Write the logs: client IP address, execution time, request and response.
 ```
 
 ## Usage
+
+1. Download ginlog by using:
+```sh
+$ go get github.com/rosberry/ginlog
+```
+2. Import it in your code:
+```go
+import "github.com/rosberry/ginlog"
+```
+3. Add ginlog.Logger(debugMode) as middleware in gin, debugMode is *bool* parameter to show more info in output.
+
+### Example
+
 ```go
 import (
   "github.com/gin-gonic/gin"
@@ -22,7 +37,7 @@ func main() {
   
   r := gin.Default()
 	
-  //Add ginlog as middleware
+  // Add ginlog as middleware
   r.GET("/ping", ginlog.Logger(debugMode), func(c *gin.Context) {
     c.JSON(200, gin.H{
       "message": "pong",
