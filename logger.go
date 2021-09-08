@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -55,7 +56,10 @@ func Logger(debug bool) gin.HandlerFunc {
 			if c.ContentType() == gin.MIMEJSON && json.Compact(compactJSON, body.Bytes()) == nil {
 				body = compactJSON
 			}
-			output += fmt.Sprintf("[GIN-DEBUG] %s%s\n", fmtDebugValues(c), string(body.Bytes()))
+
+			if !strings.Contains(c.ContentType(), gin.MIMEMultipartPOSTForm) {
+				output += fmt.Sprintf("[GIN-DEBUG] %s%s\n", fmtDebugValues(c), string(body.Bytes()))
+			}
 			output += fmt.Sprintf("[GIN-DEBUG] RESPONSE: %s\n", string(response.Bytes()))
 		}
 		output += c.Errors.ByType(gin.ErrorTypePrivate).String()
