@@ -60,7 +60,7 @@ func Logger(debug bool) gin.HandlerFunc {
 			}
 
 			if !strings.Contains(c.ContentType(), gin.MIMEMultipartPOSTForm) {
-				output += fmt.Sprintf("[GIN-DEBUG][%s] %s%s\n", userAgent, fmtDebugValues(c), string(body.Bytes()))
+				output += fmt.Sprintf("[GIN-DEBUG][%s]\n %s%s\n", userAgent, fmtDebugValues(c), string(body.Bytes()))
 			}
 			output += fmt.Sprintf("[GIN-DEBUG] RESPONSE: %s\n", string(response.Bytes()))
 		}
@@ -129,19 +129,19 @@ func userAgentInfo(c *gin.Context) string {
 	userAgent := c.Request.UserAgent()
 
 	if v := c.GetHeader("App-Version"); v != "" {
-		userAgent = fmt.Sprintf("%s %s", userAgent, v)
+		userAgent = fmt.Sprintf("%s App-Version: '%s'", userAgent, v)
 	}
 
 	if v := c.GetHeader("OS-Version"); v != "" {
-		userAgent = fmt.Sprintf("%s %s", userAgent, v)
+		userAgent = fmt.Sprintf("%s OS-Version: '%s'", userAgent, v)
 	}
 
 	if v := c.GetHeader("Device"); v != "" {
-		userAgent = fmt.Sprintf("%s %s", userAgent, v)
+		userAgent = fmt.Sprintf("%s Device: '%s'", userAgent, v)
 	}
 
 	if v := c.GetHeader("User-Timezone"); v != "" {
-		userAgent = fmt.Sprintf("%s %s", userAgent, v)
+		userAgent = fmt.Sprintf("%s User-Timezone: '%s'", userAgent, v)
 	}
 
 	return userAgent
