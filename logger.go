@@ -52,13 +52,15 @@ func Logger(debug bool) gin.HandlerFunc {
 			latency,
 		)
 		if debug {
+			userAgent := userAgentInfo(c)
+
 			compactJSON := new(bytes.Buffer)
 			if c.ContentType() == gin.MIMEJSON && json.Compact(compactJSON, body.Bytes()) == nil {
 				body = compactJSON
 			}
 
 			if !strings.Contains(c.ContentType(), gin.MIMEMultipartPOSTForm) {
-				output += fmt.Sprintf("[GIN-DEBUG] %s%s\n", fmtDebugValues(c), string(body.Bytes()))
+				output += fmt.Sprintf("[GIN-DEBUG][%s]\n %s%s\n", userAgent, fmtDebugValues(c), string(body.Bytes()))
 			}
 			output += fmt.Sprintf("[GIN-DEBUG] RESPONSE: %s\n", string(response.Bytes()))
 		}
@@ -121,4 +123,26 @@ func fmtDebugValues(c *gin.Context) string {
 		}
 	}
 	return res
+}
+
+func userAgentInfo(c *gin.Context) string {
+	userAgent := c.Request.UserAgent()
+
+	if v := c.GetHeader("App-Version"); v != "" {
+		userAgent = fmt.Sprintf("%s App-Version: '%s'", userAgent, v)
+	}
+
+	if v := c.GetHeader("OS-Version"); v != "" {
+		userAgent = fmt.Sprintf("%s OS-Version: '%s'", userAgent, v)
+	}
+
+	if v := c.GetHeader("Device"); v != "" {
+		userAgent = fmt.Sprintf("%s Device: '%s'", userAgent, v)
+	}
+
+	if v := c.GetHeader("User-Timezone"); v != "" {
+		userAgent = fmt.Sprintf("%s User-Timezone: '%s'", userAgent, v)
+	}
+
+	return userAgent
 }
